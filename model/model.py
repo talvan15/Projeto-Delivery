@@ -1,4 +1,3 @@
-# models.py
 class Pessoa:
     """"Classe base para representar uma pessoa."""
     def __init__(self, nome, telefone):
@@ -34,16 +33,20 @@ class Restaurante:
     """Classe para representar um restaurante."""
     def __init__(self, nome):
         self._nome = nome
-        self._cardapio = []
+        self._cardapio = {}
         self._pedidos = []
+        
 
     def adicionar_item(self, item):
         """Método para adicionar um item ao cardápio."""
-        self._cardapio.append(item)
+        self._cardapio[item._nome] = item._preco
 
     def listar_cardapio(self):
         """Método para listar o cardápio do restaurante."""
-        return self._cardapio
+        cardapio_formatado = "Cardápio do Restaurante:\n"
+        for nome, preco in self._cardapio.items():
+            cardapio_formatado += f"{nome}: R${preco:.2f}\n"
+        return cardapio_formatado
 
 
 class ItemCardapio:
