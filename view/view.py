@@ -1,66 +1,8 @@
-# Classe base para Produto
-class Produto:
-    def __init__(self, nome, preco, descricao):
-        self.nome = nome
-        self.preco = preco
-        self.descricao = descricao
+from model.cliente import Cliente
+from model.entregador import Entregador
+from model.pedido import Pedido
+from model.produto import Produto
 
-    def mostrar_dados(self):
-        return f"Produto: {self.nome}, Preço: R${self.preco:.2f}, Descrição: {self.descricao}"
-
-# Classe base para Pessoa
-class Pessoa:
-    def __init__(self, nome, endereco):
-        self.nome = nome
-        self.endereco = endereco
-
-    def mostrar_dados(self):
-        return f"Nome: {self.nome}, Endereço: {self.endereco}"
-
-# Cliente herda da classe Pessoa
-class Cliente(Pessoa):
-    def __init__(self, nome, endereco, telefone):
-        super().__init__(nome, endereco)
-        self.telefone = telefone
-
-    def mostrar_dados(self):
-        return f"{super().mostrar_dados()}, Telefone: {self.telefone}"
-
-# Entregador herda da classe Pessoa
-class Entregador(Pessoa):
-    def __init__(self, nome, endereco, veiculo):
-        super().__init__(nome, endereco)
-        self.veiculo = veiculo
-
-    def mostrar_dados(self):
-        return f"{super().mostrar_dados()}, Veículo: {self.veiculo}"
-
-# Pedido que armazena informações dos pedidos
-class Pedido:
-    def __init__(self, cliente, entregador, itens, metodo_pagamento):
-        self.cliente = cliente
-        self.entregador = entregador
-        self.itens = itens
-        self.status = "Pendente"
-        self.metodo_pagamento = metodo_pagamento
-
-    def atualizar_status(self, novo_status):
-        self.status = novo_status
-
-    def calcular_total(self):
-        total = sum(item.preco for item in self.itens)
-        return total
-
-    def mostrar_pedido(self):
-        itens_str = "\n".join([item.mostrar_dados() for item in self.itens])
-        return (f"Cliente: {self.cliente.mostrar_dados()}\n"
-                f"Entregador: {self.entregador.mostrar_dados()}\n"
-                f"Itens:\n{itens_str}\n"
-                f"Método de Pagamento: {self.metodo_pagamento}\n"
-                f"Total: R${self.calcular_total():.2f}\n"
-                f"Status: {self.status}")
-
-# Função para cadastrar produtos
 def cadastrar_produtos():
     produtos = []
     produtos.append(Produto("Pizza", 40.00, "Pizza de queijo e pepperoni"))
@@ -68,7 +10,6 @@ def cadastrar_produtos():
     produtos.append(Produto("Sobremesa", 10.00, "Torta de chocolate"))
     return produtos
 
-# Função principal
 def main():
     # Informações do cliente
     print("\nPor favor, insira os dados do cliente:")
@@ -94,7 +35,7 @@ def main():
             indice = int(escolha) - 1
             if 0 <= indice < len(produtos):
                 itens_selecionados.append(produtos[indice])
-                print(f"'{produtos[indice].nome}' adicionado ao pedido.")
+                print(f"'{produtos[indice]._nome}' adicionado ao pedido.")
             else:
                 print("Opção inválida. Tente novamente.")
         except ValueError:
@@ -143,6 +84,3 @@ def main():
             break
         else:
             print("Opção inválida. Por favor, digite 's' ou 'n'.")
-
-if __name__ == "__main__":
-    main()
