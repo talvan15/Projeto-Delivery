@@ -1,8 +1,8 @@
 class Produto:
-    def __init__(self, nome, preco, descricao):
+    def _init_(self, nome, preco, categoria):
         self._nome = nome
         self._preco = preco
-        self._descricao = descricao
+        self._categoria = categoria
 
-    def mostrar_dados(self):
-        return f"Produto: {self._nome}, Preço: R${self._preco:.2f}, Descrição: {self._descricao}"
+    def exibir_detalhes(self):
+        return f"{self._nome} - {self._categoria} - R${self._preco:.2f}"
