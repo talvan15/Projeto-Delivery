@@ -1,14 +1,12 @@
 class Restaurante:
-    def _init_(self, nome, endereco, cnpj):
+    def __init__(self, nome, endereco, cnpj):
         self._nome = nome
         self._endereco = endereco
         self._cnpj = cnpj
-        self._cardapio = []  # Lista de itens no cardápio
-
+        self._cardapio = []  # Lista para armazenar os itens do cardápio
+    
     def adicionar_item_ao_cardapio(self, item):
         self._cardapio.append(item)
-        
-    def mostrar_cardapio(self):
-        if not self._cardapio:
-            return "O cardápio está vazio."
-        return "\n".join([item.exibir_detalhes() for item in self._cardapio])
+    
+    def mostrar_dados(self):
+        return f"{self._nome} - {self._endereco} - {self._cnpj}"
