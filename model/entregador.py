@@ -1,9 +1,12 @@
-from model.pessoa import Pessoa
+from model.pessoa import Pessoa# Classe Entregador (herda de Pessoa)
 class Entregador(Pessoa):
-    def _init_(self, nome, endereco,cpf, veiculo):
-        super()._init_(nome, endereco)
-        self._cpf=cpf
-        self._veiculo = veiculo
+    def __init__(self, nome, endereco, telefone, cpf, veiculo):
+        # Chama o construtor da classe base Pessoa (somente com nome, endereco e telefone)
+        super().__init__(nome, endereco, telefone)
+        # Adiciona os atributos específicos do Entregador
+        self.cpf = cpf
+        self.veiculo = veiculo
 
     def mostrar_dados(self):
-        return f"{super().mostrar_dados()}, CPF: {self._cpf} Veículo: {self._veiculo}"
+        # Retorna todos os dados, incluindo os específicos do Entregador
+        return f"{super().mostrar_dados()}, CPF: {self.cpf}, Veículo: {self.veiculo}"
