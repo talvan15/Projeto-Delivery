@@ -1,7 +1,8 @@
 class Pessoa:
-    def __init__(self, nome, endereco):
+    def __init__(self, nome, endereco,telefone):
         self._nome = nome
         self._endereco = endereco
+        self. telefone = telefone
 
     def get_endereco(self):
         return self._endereco
