@@ -2,8 +2,8 @@ import os
 from model.cliente import Cliente
 from model.entregador import Entregador
 from model.pedido import Pedido
-from model.produto import Produto
 from model.restaurante import Restaurante
+from model.itemcardapio import ItemCardapio  # Certifique-se de ter a classe ItemCardapio importada
 
 # Função para salvar informações dos restaurantes em um arquivo
 def salvar_restaurantes_no_arquivo(restaurantes):
@@ -26,9 +26,9 @@ def carregar_restaurantes_do_arquivo():
 # Função para cadastrar produtos no sistema
 def cadastrar_produtos():
     produtos = [
-        Produto("Pizza", 40.00, "Pizza de queijo e pepperoni"),
-        Produto("Refrigerante", 5.00, "Refrigerante de cola 350ml"),
-        Produto("Sobremesa", 10.00, "Torta de chocolate")
+        ItemCardapio("Pizza", 40.00, "Pizza de queijo e pepperoni"),
+        ItemCardapio("Refrigerante", 5.00, "Refrigerante de cola 350ml"),
+        ItemCardapio("Sobremesa", 10.00, "Torta de chocolate")
     ]
     return produtos
 
@@ -55,13 +55,12 @@ def login_entregador():
     entregador = Entregador(nome_entregador, endereco_entregador, cpf_entregador, veiculo_entregador)
     return entregador
 
-
 def restaurante_cardapio():
     os.system('cls')
     
     # Carregar restaurantes cadastrados
     restaurantes = carregar_restaurantes_do_arquivo()
-    
+
     # Função para realizar o login do restaurante e salvar no arquivo
     def login_restaurante():
         while True:
@@ -72,6 +71,7 @@ def restaurante_cardapio():
             cnpj_restaurante = input("CNPJ: ")
             print("\nSeu restaurante foi cadastrado com sucesso!")
 
+            # Agora a classe Restaurante aceita parâmetros no construtor
             restaurante = Restaurante(nome_restaurante, endereco_restaurante, cnpj_restaurante)
             
             # Salvar restaurante no arquivo
@@ -103,7 +103,7 @@ def restaurante_cardapio():
                     print(f"Você escolheu o restaurante: {restaurante_escolhido._nome}")
                     
                     # Mostrar cardápio do restaurante escolhido
-                    if len(restaurante_escolhido._cardapio) > 0:  # Alterado de cardapio para _cardapio
+                    if len(restaurante_escolhido._cardapio) > 0:
                         print(f"\nCardápio do {restaurante_escolhido._nome}:")
                         for item in restaurante_escolhido._cardapio:
                             print(f"- {item._nome}: {item._preco} - {item._categoria}")
@@ -132,7 +132,7 @@ def restaurante_cardapio():
 # Função para mostrar o cardápio de um restaurante
 def mostrar_cardapio_restaurante(restaurante):
     print(f"\nCardápio do restaurante {restaurante._nome}:")
-    if len(restaurante._cardapio) == 0:  # Alterado de cardapio para _cardapio
+    if len(restaurante._cardapio) == 0:
         print("Adicione item ao seu cardápio.")
     else:
         for item in restaurante._cardapio:
