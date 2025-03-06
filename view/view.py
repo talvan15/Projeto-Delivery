@@ -3,7 +3,19 @@ from model.cliente import Cliente
 from model.entregador import Entregador
 from model.pedido import Pedido
 from model.restaurante import Restaurante
-from model.itemcardapio import ItemCardapio  # Certifique-se de ter a classe ItemCardapio importada
+from model.itemcardapio import ItemCardapio  # Importando a classe ItemCardapio
+
+# Classe Pessoa (base)
+class Pessoa:
+    def __init__(self, nome, endereco, telefone):
+        self.nome = nome
+        self.endereco = endereco
+        self.telefone = telefone
+
+# Classe Cliente (herda de Pessoa)
+class Cliente(Pessoa):
+    def __init__(self, nome, endereco, telefone):
+        super().__init__(nome, endereco, telefone)
 
 # Função para salvar informações dos restaurantes em um arquivo
 def salvar_restaurantes_no_arquivo(restaurantes):
@@ -40,7 +52,7 @@ def login_cliente():
     nome_cliente = input("Nome: ")
     endereco_cliente = input("Endereço: ")
     telefone_cliente = input("Telefone: ")
-    cliente = Cliente(nome_cliente, endereco_cliente, telefone_cliente)
+    cliente = Cliente(nome_cliente, endereco_cliente, telefone_cliente)  # Corrigido para usar o Cliente corretamente
     return cliente
 
 # Função para realizar o login do entregador
@@ -55,40 +67,17 @@ def login_entregador():
     entregador = Entregador(nome_entregador, endereco_entregador, cpf_entregador, veiculo_entregador)
     return entregador
 
-def restaurante_cardapio():
+
+def restaurante_cardapio(restaurantes):
     os.system('cls')
     
     # Carregar restaurantes cadastrados
-    restaurantes = carregar_restaurantes_do_arquivo()
-
-    # Função para realizar o login do restaurante e salvar no arquivo
-    def login_restaurante():
-        while True:
-            print("\n--------------Seja bem-vindo ao nosso app--------------")
-            print("\nPor favor, insira os dados do restaurante:")
-            nome_restaurante = input("Nome: ")
-            endereco_restaurante = input("Endereço: ")
-            cnpj_restaurante = input("CNPJ: ")
-            print("\nSeu restaurante foi cadastrado com sucesso!")
-
-            # Agora a classe Restaurante aceita parâmetros no construtor
-            restaurante = Restaurante(nome_restaurante, endereco_restaurante, cnpj_restaurante)
-            
-            # Salvar restaurante no arquivo
-            salvar_restaurantes_no_arquivo([restaurante])  # Passamos a lista com o restaurante para a função de salvar
-            restaurantes.append(restaurante)  # Adiciona o restaurante na lista local
-            
-            cadastrar_outro = input("\nDeseja cadastrar outro restaurante? (s/n): ")
-            if cadastrar_outro.lower() == 'n':
-                break  # Sai do loop e retorna ao menu de login
-            elif cadastrar_outro.lower() != 's':
-                print("Opção inválida. Por favor, insira 's' ou 'n'.")
+    if not restaurantes:  # Verifique se a lista de restaurantes está vazia
+        print("Não há restaurantes cadastrados. Por favor, cadastre um restaurante.")
+        return
 
     # Função para cadastrar um produto ao cardápio do restaurante
     def cadastrar_produto_restaurante():
-        if len(restaurantes) == 0:
-            print("Nenhum restaurante cadastrado. Vamos cadastrar um novo restaurante.")
-            login_restaurante()
         
         while True:
             print("\n------ Restaurantes Cadastrados ------")
@@ -103,9 +92,9 @@ def restaurante_cardapio():
                     print(f"Você escolheu o restaurante: {restaurante_escolhido._nome}")
                     
                     # Mostrar cardápio do restaurante escolhido
-                    if len(restaurante_escolhido._cardapio) > 0:
+                    if len(restaurante_escolhido.cardapio) > 0:  # Alterado de `cardapio` para `cardapio`
                         print(f"\nCardápio do {restaurante_escolhido._nome}:")
-                        for item in restaurante_escolhido._cardapio:
+                        for item in restaurante_escolhido.cardapio:  # Ajuste aqui também
                             print(f"- {item._nome}: {item._preco} - {item._categoria}")
                     else:
                         print("\nAdicione item ao seu cardápio")
@@ -129,22 +118,46 @@ def restaurante_cardapio():
     # Verificar se o restaurante foi cadastrado ou precisa cadastrar um
     cadastrar_produto_restaurante()
 
+def login_restaurante():
+    restaurantes = carregar_restaurantes_do_arquivo()  # Corrigido: Carregar a lista de restaurantes antes
+    while True:
+        print("\n--------------Seja bem-vindo ao nosso app--------------")
+        print("\nPor favor, insira os dados do restaurante:")
+        nome_restaurante = input("Nome: ")
+        endereco_restaurante = input("Endereço: ")
+        cnpj_restaurante = input("CNPJ: ")
+        print("\nSeu restaurante foi cadastrado com sucesso!")
+
+        restaurante = Restaurante(nome_restaurante, endereco_restaurante, cnpj_restaurante)
+        
+        # Salvar restaurante no arquivo
+        salvar_restaurantes_no_arquivo([restaurante])  # Passamos a lista com o restaurante para a função de salvar
+        restaurantes.append(restaurante)  # Adiciona o restaurante na lista local
+        
+        cadastrar_outro = input("\nDeseja cadastrar outro restaurante? (s/n): ")
+        if cadastrar_outro.lower() == 'n':
+            break  # Sai do loop e retorna ao menu de login
+        elif cadastrar_outro.lower() != 's':
+            print("Opção inválida. Por favor, insira 's' ou 'n'.")
+            
 # Função para mostrar o cardápio de um restaurante
 def mostrar_cardapio_restaurante(restaurante):
     print(f"\nCardápio do restaurante {restaurante._nome}:")
-    if len(restaurante._cardapio) == 0:
+    if len(restaurante.cardapio) == 0:  # Alterado de `cardapio` para `cardapio`
         print("Adicione item ao seu cardápio.")
     else:
-        for item in restaurante._cardapio:
+        for item in restaurante.cardapio:  # Ajuste aqui também
             print(f"{item._nome} - {item._preco} - {item._categoria}")
 
 # Função principal que controla o fluxo do sistema
 def main():
+    restaurantes = carregar_restaurantes_do_arquivo()  # Corrigido: Carregar a lista de restaurantes antes
     while True:
         print("\nEscolha o tipo de login:")
         print("1. Cliente")
         print("2. Entregador")
         print("3. Restaurante")
+        print("4. Adicionar item no cardapio")
         tipo_usuario = input("Digite o número da opção: ")
 
         # Login de acordo com a opção do usuário
@@ -156,7 +169,10 @@ def main():
                 entregador = login_entregador()
                 break
             case '3':
-                restaurante_cardapio()
+                restaurante_cardapio(restaurantes)  # Corrigido para passar a lista de restaurantes
+                break
+            case '4':
+                restaurante_cardapio(restaurantes)  # Corrigido para passar a lista de restaurantes
                 break
             case _:
                 print("Opção inválida. Tente novamente.")
